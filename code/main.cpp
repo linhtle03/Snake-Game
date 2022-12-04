@@ -3,7 +3,7 @@
 int main()
 {
 	// Declare an instance of Engine
-	Snake Snake;
+	Snake Snake(float startX, float startY);
 
 	// Start the engine
 	Snake.moveDown();
