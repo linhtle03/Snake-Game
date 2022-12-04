@@ -6,68 +6,7 @@ using namespace std;
 
 int main()
 {
-    // Create a video mode object
-	VideoMode vm(1920, 1080);
-
-	// Create and open a window for the game
-	RenderWindow window(vm, "Timber!!!", Style::Default);
-
-	// Create a texture to hold a graphic on the GPU
-	Texture textureBackground;
-
-	// Load a graphic into the texture
-	textureBackground.loadFromFile("graphics/background.png");
-
-	// Create a sprite
-	Sprite spriteBackground;
-
-	// Attach the texture to the sprite
-	spriteBackground.setTexture(textureBackground);
-
-	// Set the spriteBackground to cover the screen
-	spriteBackground.setPosition(0, 0);
-
-
-	while (window.isOpen())
-	{
-
-		/*
-		****************************************
-		Handle the players input
-		****************************************
-		*/
-
-		if (Keyboard::isKeyPressed(Keyboard::Escape))
-		{
-			window.close();
-		}
-
-		/*
-		****************************************
-		Update the scene
-		****************************************
-		*/
-
-
-		/*
-		****************************************
-		Draw the scene
-		****************************************
-		*/
-
-		// Clear everything from the last frame
-		window.clear();
-
-		// Draw our game scene here
-		window.draw(spriteBackground);
-
-		// Show everything we just drew
-		window.display();
-
-
-	}
-
-/*    // Get the screen resolution and create an SFML window
+   /* // Get the screen resolution and create an SFML window
     Vector2f resolution;
     resolution.x = VideoMode::getDesktopMode().width;
     resolution.y = VideoMode::getDesktopMode().height;
@@ -78,7 +17,7 @@ int main()
     sf::Clock clock;
 
     Texture faceTexture;
-    faceTexture.loadFromFile("Talking.png");
+    faceTexture.loadFromFile("graphics/grass1.png");
 
     VertexArray talkingFace;
     talkingFace.setPrimitiveType(Quads);
@@ -130,5 +69,67 @@ int main()
         window.draw(talkingFace, &faceTexture);
         window.display();
     }
-    */
+*/
+
+// Create a video mode object
+	VideoMode vm(1920, 1080);
+
+	// Create and open a window for the game
+	RenderWindow window(vm, "Snake Game", Style::Default);
+
+	// Create a texture to hold a graphic on the GPU
+	Texture textureBackground;
+
+	// Load a graphic into the texture
+	textureBackground.loadFromFile("graphics/grass1.png");
+
+	// Create a sprite
+	Sprite spriteBackground;
+
+	// Attach the texture to the sprite
+	spriteBackground.setTexture(textureBackground);
+
+	// Set the spriteBackground to cover the screen
+	spriteBackground.setPosition(0, 0);
+
+
+	while (window.isOpen())
+	{
+
+		/*
+		****************************************
+		Handle the players input
+		****************************************
+		*/
+
+		if (Keyboard::isKeyPressed(Keyboard::Escape))
+		{
+			window.close();
+		}
+
+		/*
+		****************************************
+		Update the scene
+		****************************************
+		*/
+
+
+		/*
+		****************************************
+		Draw the scene
+		****************************************
+		*/
+
+		// Clear everything from the last frame
+		window.clear();
+
+		// Draw our game scene here
+		window.draw(spriteBackground);
+
+		// Show everything we just drew
+		window.display();
+
+
+	}
+
 }
