@@ -35,7 +35,7 @@ int main()
     // Set the font to our message
     messageText.setFont(font);
     // Assign the actual message
-    messageText.setString("GAME INSTRUCTION: \n1. Collect coins to increase your size and HP to prepare for the attack. \n2. Avoid bombs and survive until time runs out.");
+    messageText.setString("GAME INSTRUCTION: \n1. Collect coins to increase your size and HP to prepare for the attack. \n2. Avoid bombs and survive until time runs out. \nClick ENTER to start.");
     // Make it really big 
     messageText.setCharacterSize(30);
 
