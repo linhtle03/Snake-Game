@@ -51,14 +51,14 @@ int main()
 
 	// Prepare the coin
 	Texture textureCoin;
-	textureCoin.loadFromFile("graphics/coin.png");
+	textureCoin.loadFromFile("graphics/coin_1.png");
 	Sprite spriteCoin;
 	spriteCoin.setTexture(textureCoin);
 	spriteCoin.setPosition(800, 200);
 
 	// Prepare the bomb
 	Texture textureBomb;
-	textureBomb.loadFromFile("graphics/bomb.png");
+	textureBomb.loadFromFile("graphics/bomb_1.png");
 	Sprite spriteBomb;
 	spriteBomb.setTexture(textureBomb);
 	spriteBomb.setPosition(200, 300);
