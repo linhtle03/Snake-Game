@@ -93,6 +93,9 @@ int main()
 	coinSpin[4].position = coinPosition + Vector2f(0,0);
 
     int frame = 0;
+	Time animate_time;
+
+    Time dt;
 
 
 	// Prepare the bomb
@@ -123,17 +126,31 @@ int main()
 		Coin (0, 0);
 	}
 	*/
-
 	// The main game loop
 	while (window.isOpen())
 	{
+		dt = clock.restart();
+		animate_time += dt;
 		if (paused)
 		{
 			// Draw our message
 			window.draw(messageText);
 			window.display();
 		}
+		if (animate_time >= seconds(FRAME_TIME_S))
+			{
+				frame++;
+				frame %= 5;
+				animate_time = Time::Zero;
+			}
+			// Set the texture coordinates of each vertex
+			int frameOffset = COIN_SHEET_WIDTH * frame;
 
+			coinSpin[0].texCoords = Vector2f(0, 0 + frameOffset);
+			coinSpin[1].texCoords = Vector2f(COIN_SHEET_WIDTH, 0 + frameOffset);
+			coinSpin[2].texCoords = Vector2f(COIN_SHEET_WIDTH, COIN_SHEET_WIDTH + frameOffset);
+			coinSpin[3].texCoords = Vector2f(0, COIN_SHEET_WIDTH + frameOffset);
+			coinSpin[4].position = coinPosition + Vector2f(0, 0 + frameOffset);
 		// Handle events
 		Event event;
 		while (window.pollEvent(event))
@@ -166,10 +183,11 @@ int main()
 
 				if (state == State::PLAYING)
 				{
+					
 				}
 
 			}
-		}// End event polling
+		}
 
 
 		// Handle the player quitting
@@ -287,16 +305,6 @@ int main()
 		if (state == State::PLAYING)
 		{
 			window.clear();
-
-			// Set the texture coordinates of each vertex
-			int frameOffset = COIN_SHEET_WIDTH * frame;
-
-			coinSpin[0].texCoords = Vector2f(0, 0 + frameOffset);
-			coinSpin[1].texCoords = Vector2f(COIN_SHEET_WIDTH, 0 + frameOffset);
-			coinSpin[2].texCoords = Vector2f(COIN_SHEET_WIDTH, COIN_SHEET_WIDTH + frameOffset);
-			coinSpin[3].texCoords = Vector2f(0, COIN_SHEET_WIDTH + frameOffset);
-			coinSpin[4].position = coinPosition + Vector2f(0, 0 + frameOffset);
-
 
 			// set the mainView to be displayed in the window
 			// And draw everything related to it
