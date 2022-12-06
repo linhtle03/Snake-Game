@@ -5,6 +5,7 @@
 #include <SFML/Audio.hpp>
 
 using namespace sf;
+using namespace std;
 
 int main()
 {
@@ -75,10 +76,26 @@ int main()
 
 	// Prepare the coin
 	Texture textureCoin;
-	textureCoin.loadFromFile("graphics/coin_1.png");
-	Sprite spriteCoin;
-	spriteCoin.setTexture(textureCoin);
-	spriteCoin.setPosition(800, 200);
+	textureCoin.loadFromFile("graphics/coin_all.png");
+	VertexArray coinSpin;
+    coinSpin.setPrimitiveType(Quads);
+    coinSpin.resize(4);
+
+    const int COIN_SHEET_WIDTH = 200;
+    const float FRAME_TIME_S = 0.2f;
+
+    Vector2f coinPosition = { resolution.x / 2, resolution.y / 2 };
+
+    coinSpin[0].position = coinPosition + Vector2f(0, 0);
+    coinSpin[1].position = coinPosition + Vector2f(COIN_SHEET_WIDTH, 0);
+    coinSpin[2].position = coinPosition + Vector2f(COIN_SHEET_WIDTH, COIN_SHEET_WIDTH);
+    coinSpin[3].position = coinPosition + Vector2f(0, COIN_SHEET_WIDTH);
+
+    Time animate_time;
+    int frame = 0;
+
+    Time dt;
+
 
 	// Prepare the bomb
 	Texture textureBomb;
@@ -272,6 +289,24 @@ int main()
 		if (state == State::PLAYING)
 		{
 			window.clear();
+			dt = clock.restart();
+        	animate_time += dt;
+
+			if (animate_time >= seconds(FRAME_TIME_S))
+			{
+				frame++;
+				frame %= 4;
+				animate_time = Time::Zero;
+			}
+
+			// Set the texture coordinates of each vertex
+			int frameOffset = COIN_SHEET_WIDTH * frame;
+
+			coinSpin[0].texCoords = Vector2f(0, 0 + frameOffset);
+			coinSpin[1].texCoords = Vector2f(COIN_SHEET_WIDTH, 0 + frameOffset);
+			coinSpin[2].texCoords = Vector2f(COIN_SHEET_WIDTH, COIN_SHEET_WIDTH + frameOffset);
+			coinSpin[3].texCoords = Vector2f(0, COIN_SHEET_WIDTH + frameOffset);
+
 
 			// set the mainView to be displayed in the window
 			// And draw everything related to it
@@ -280,7 +315,7 @@ int main()
 			window.draw(spriteBackground);
 			// Draw the player
 			window.draw(player.getSprite());
-			window.draw(spriteCoin);
+			window.draw(coinSpin, &textureCoin);
 			window.draw(spriteBomb);
 			//window.draw(ball.getShape());
 
