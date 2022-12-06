@@ -26,6 +26,30 @@ int main()
 	// Create a an SFML View for the main action
 	View mainView(sf::FloatRect(0, 0, resolution.x, resolution.y));
 
+	bool paused = true;
+
+	Text messageText;
+    // We need to choose a font
+    Font font;
+    font.loadFromFile("fonts/KOMIKAP_.ttf");
+    // Set the font to our message
+    messageText.setFont(font);
+    // Assign the actual message
+    messageText.setString("GAME INSTRUCTION: \n1. Collect coins to increase your size and HP to prepare for the attack. \n2. Avoid bombs and survive until time runs out.");
+    // Make it really big 
+    messageText.setCharacterSize(30);
+
+    //Choose a color
+    messageText.setFillColor(Color::White);
+
+    // Position the text
+    FloatRect textRect = messageText.getLocalBounds();
+    messageText.setOrigin(textRect.left +
+        textRect.width / 2.0f,
+        textRect.top +
+        textRect.height / 2.0f);
+    messageText.setPosition(resolution.x / 2.0f, resolution.y / 2.0f);
+
 	// Here is our clock for timing everything
 	Clock clock;
 
@@ -88,11 +112,12 @@ int main()
 	// The main game loop
 	while (window.isOpen())
 	{
-		/*
-		************
-		Handle input
-		************
-		*/
+		if (paused)
+		{
+			// Draw our message
+			window.draw(messageText);
+			window.display();
+		}
 
 		// Handle events
 		Event event;
@@ -100,6 +125,7 @@ int main()
 		{
 			if (event.type == Event::KeyPressed)
 			{
+				paused = false;
 				// Pause a game while playing
 				if (event.key.code == Keyboard::Return &&
 					state == State::PLAYING)
