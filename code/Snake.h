@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <cmath>
 using namespace sf;
 class Snake
 {
@@ -45,6 +44,16 @@ private:
 	// Speed in pixels per second
 	float m_Speed;
 
+	/*Vector2f m_Position;
+	// A RectangleShape object
+	RectangleShape m_Shape;
+	float m_Speed = 1000.0f;
+	bool m_MovingRight = false;
+	bool m_MovingLeft = false;
+    bool m_MovingUp = false;
+	bool m_MovingDown = false;
+	*/
+
 public:
 
 	Snake();
@@ -82,14 +91,14 @@ public:
 	void moveDown();
 
 	// Stop the player moving in a specific direction
+
+	/*
 	void stopLeft();
-
 	void stopRight();
-
 	void stopUp();
-
 	void stopDown();
-
+	*/
+	
 	// We will call this function once every frame
 	void update(float elapsedTime, Vector2i mousePosition);
 
@@ -102,4 +111,13 @@ public:
 	// Increase the maximum amount of health the player can have
 	void increaseHealthLevel(int amount);
 
+	/*Snake(float startX, float startY);
+	FloatRect getPosition();
+	RectangleShape getShape();
+	void moveLeft();
+	void moveRight();
+    void moveUp();
+    void moveDown();
+	void update(Time dt);
+	*/
 };

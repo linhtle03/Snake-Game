@@ -1,135 +1,280 @@
-#include <iostream>
 #include <SFML/Graphics.hpp>
+#include "Snake.h"
+#include "Pickup.h"
+#include "Coin.h"
+#include <SFML/Audio.hpp>
 
 using namespace sf;
-using namespace std;
 
 int main()
 {
-   /* // Get the screen resolution and create an SFML window
-    Vector2f resolution;
-    resolution.x = VideoMode::getDesktopMode().width;
-    resolution.y = VideoMode::getDesktopMode().height;
+	// The game will always be in one of four states
+	enum class State { PAUSED, LEVELING_UP, GAME_OVER, PLAYING };
+	// Start with the GAME_OVER state
+	State state = State::GAME_OVER;
 
-    RenderWindow window(VideoMode(resolution.x, resolution.y),
-        "Snake Game", Style::Default);
+	// Get the screen resolution and create an SFML window
+	Vector2f resolution;
+	resolution.x = VideoMode::getDesktopMode().width;
+	resolution.y = VideoMode::getDesktopMode().height;
 
-    sf::Clock clock;
+	float X = VideoMode::getDesktopMode().width;
+	float Y = VideoMode::getDesktopMode().height;
 
-    Texture faceTexture;
-    faceTexture.loadFromFile("graphics/grass1.png");
+	RenderWindow window(VideoMode(resolution.x, resolution.y),"Snake Game", Style::Fullscreen);
 
-    VertexArray talkingFace;
-    talkingFace.setPrimitiveType(Quads);
-    talkingFace.resize(4);
+	// Create a an SFML View for the main action
+	View mainView(sf::FloatRect(0, 0, resolution.x, resolution.y));
 
-    const int FACE_SHEET_WIDTH = 200;
-    const float FRAME_TIME_S = 0.2f;
+	// Here is our clock for timing everything
+	Clock clock;
 
-    Vector2f facePosition = { resolution.x / 2, resolution.y / 2 };
+	// How long has the PLAYING state been active
+	Time gameTimeTotal;
 
-    talkingFace[0].position = facePosition + Vector2f(0, 0);
-    talkingFace[1].position = facePosition + Vector2f(FACE_SHEET_WIDTH, 0);
-    talkingFace[2].position = facePosition + Vector2f(FACE_SHEET_WIDTH, FACE_SHEET_WIDTH);
-    talkingFace[3].position = facePosition + Vector2f(0, FACE_SHEET_WIDTH);
+	// Create an instance of the Player class
+	Snake player;
 
-    Time face_animate_time;
-    int faceFrame = 0;
-
-    Time dt;
-
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        dt = clock.restart();
-        face_animate_time += dt;
-
-        if (face_animate_time >= seconds(FRAME_TIME_S))
-        {
-            faceFrame++;
-            faceFrame %= 4;
-            face_animate_time = Time::Zero;
-        }
-
-        // Set the texture coordinates of each vertex
-        int frameOffset = FACE_SHEET_WIDTH * faceFrame;
-
-        talkingFace[0].texCoords = Vector2f(0, 0 + frameOffset);
-        talkingFace[1].texCoords = Vector2f(FACE_SHEET_WIDTH, 0 + frameOffset);
-        talkingFace[2].texCoords = Vector2f(FACE_SHEET_WIDTH, FACE_SHEET_WIDTH + frameOffset);
-        talkingFace[3].texCoords = Vector2f(0, FACE_SHEET_WIDTH + frameOffset);
-
-        window.clear(Color::Magenta);
-        window.draw(talkingFace, &faceTexture);
-        window.display();
-    }
-*/
-
-// Create a video mode object
-	VideoMode vm(1920, 1080);
-
-	// Create and open a window for the game
-	RenderWindow window(vm, "Snake Game", Style::Default);
+	// The boundaries of the arena
+	IntRect arena;
 
 	// Create a texture to hold a graphic on the GPU
 	Texture textureBackground;
-
-	// Load a graphic into the texture
 	textureBackground.loadFromFile("graphics/grass.png");
-
-	// Create a sprite
 	Sprite spriteBackground;
-
-	// Attach the texture to the sprite
 	spriteBackground.setTexture(textureBackground);
-
-	// Set the spriteBackground to cover the screen
 	spriteBackground.setPosition(0, 0);
 
+	// Create a couple of pickups
+	//Pickup healthPickup(1);
+	//Pickup ammoPickup(2);
 
+	// Prepare the coin
+	Texture textureCoin;
+	textureCoin.loadFromFile("graphics/coin.png");
+	Sprite spriteCoin;
+	spriteCoin.setTexture(textureCoin);
+	spriteCoin.setPosition(800, 200);
+
+	// Prepare the bomb
+	Texture textureBomb;
+	textureBomb.loadFromFile("graphics/bomb.png");
+	Sprite spriteBomb;
+	spriteBomb.setTexture(textureBomb);
+	spriteBomb.setPosition(200, 300);
+
+	// Prepare the hit sound
+	SoundBuffer hitBuffer;
+	hitBuffer.loadFromFile("sound/bomb.wav");
+	Sound hit;
+	hit.setBuffer(hitBuffer);
+
+	// Prepare the splat sound
+	SoundBuffer splatBuffer;
+	splatBuffer.loadFromFile("sound/coin.wav");
+	Sound splat;
+	splat.setBuffer(splatBuffer);
+
+	// We will add a ball in the next chapter
+	/*
+	Coin ball(100, 100);
+	bool m_Spawned = true;
+	if (m_Spawned)
+	{
+		Coin (0, 0);
+	}
+	*/
+
+	// The main game loop
 	while (window.isOpen())
 	{
-
 		/*
-		****************************************
-		Handle the players input
-		****************************************
+		************
+		Handle input
+		************
 		*/
 
+		// Handle events
+		Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == Event::KeyPressed)
+			{
+				// Pause a game while playing
+				if (event.key.code == Keyboard::Return &&
+					state == State::PLAYING)
+				{
+					state = State::PAUSED;
+				}
+
+				// Restart while paused
+				else if (event.key.code == Keyboard::Return &&
+					state == State::PAUSED)
+				{
+					state = State::PLAYING;
+					// Reset the clock so there isn't a frame jump
+					clock.restart();
+				}
+
+				// Start a new game while in GAME_OVER state
+				else if (event.key.code == Keyboard::Return &&
+					state == State::GAME_OVER)
+				{
+					state = State::LEVELING_UP;
+				}
+
+				if (state == State::PLAYING)
+				{
+				}
+
+			}
+		}// End event polling
+
+
+		// Handle the player quitting
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
 		{
 			window.close();
 		}
 
+		// Handle controls while playing
+		if (state == State::PLAYING)
+		{
+			// Handle the pressing and releasing of the WASD keys
+			if (Keyboard::isKeyPressed(Keyboard::Up))
+			{
+				player.moveUp();
+				//hit.play();
+			}
+
+			if (Keyboard::isKeyPressed(Keyboard::Down))
+			{
+				player.moveDown();
+				//hit.play();
+			}
+
+			if (Keyboard::isKeyPressed(Keyboard::Left))
+			{
+				player.moveLeft();
+				//hit.play();
+			}
+
+			if (Keyboard::isKeyPressed(Keyboard::Right))
+			{
+				player.moveRight();
+				//hit.play();
+			}
+
+		}// End WASD while playing
+
+		// Handle the levelling up state
+		if (state == State::LEVELING_UP)
+		{
+			// Handle the player levelling up
+			if (event.key.code == Keyboard::Enter)
+			{
+				state = State::PLAYING;
+			}
+
+			if (state == State::PLAYING)
+			{
+				// Prepare thelevel
+				// We will modify the next two lines later
+				//arena.width = 1870;
+				//arena.height = 1030;
+				//arena.left = 50;
+				//arena.top = 50;
+
+				arena.width = X - 50;
+				arena.height = Y - 50;
+				arena.left = 50;
+				arena.top = 50;
+
+				// We will modify this line of code later
+				int tileSize = 50;
+
+				// Spawn the player in the middle of the arena
+				player.spawn(arena, resolution, tileSize);
+
+				// Reset the clock so there isn't a frame jump
+				clock.restart();
+
+
+			}
+		}// End levelling up
+
 		/*
-		****************************************
-		Update the scene
-		****************************************
+		****************
+		UPDATE THE FRAME
+		****************
 		*/
+		if (state == State::PLAYING)
+		{
+			// Update the delta time
+			Time dt = clock.restart();
+			// Update the total game time
+			gameTimeTotal += dt;
+			// Make a decimal fraction of 1 from the delta time
+			float dtAsSeconds = dt.asSeconds();
 
+			// Update the player
+			player.update(dtAsSeconds, Mouse::getPosition());
+
+			// Make a note of the players new position
+			Vector2f playerPosition(player.getCenter());
+
+			//ball.update(dt);
+			/*
+			// Has the ball hit the bat?
+			if (spriteCoin.getPosition().intersects(player.getPosition()))
+			{
+				// Hit detected so reverse the ball and score a point
+				ball.reboundBatOrTop();
+				splat.play();
+				m_Spawned = false;
+			}
+			*/
+
+		}// End updating the scene
 
 		/*
-		****************************************
+		**************
 		Draw the scene
-		****************************************
+		**************
 		*/
 
-		// Clear everything from the last frame
-		window.clear();
+		if (state == State::PLAYING)
+		{
+			window.clear();
 
-		// Draw our game scene here
-		window.draw(spriteBackground);
+			// set the mainView to be displayed in the window
+			// And draw everything related to it
+			window.setView(mainView);
+			// Draw the background
+			window.draw(spriteBackground);
+			// Draw the player
+			window.draw(player.getSprite());
+			window.draw(spriteCoin);
+			window.draw(spriteBomb);
+			//window.draw(ball.getShape());
 
-		// Show everything we just drew
+		}
+
+		if (state == State::LEVELING_UP)
+		{
+		}
+
+		if (state == State::PAUSED)
+		{
+		}
+
+		if (state == State::GAME_OVER)
+		{
+		}
+
 		window.display();
 
+	}// End game loop
 
-	}
-
+	return 0;
 }
