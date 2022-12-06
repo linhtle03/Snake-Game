@@ -81,7 +81,7 @@ int main()
     coinSpin.setPrimitiveType(Quads);
     coinSpin.resize(5);
 
-    const int COIN_SHEET_WIDTH = 32;
+    const int COIN_SHEET_WIDTH = 160;
     const float FRAME_TIME_S = 0.2f;
 
     Vector2f coinPosition = { resolution.x / 2, resolution.y / 2 };
