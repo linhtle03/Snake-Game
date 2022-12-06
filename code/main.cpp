@@ -79,9 +79,9 @@ int main()
 	textureCoin.loadFromFile("graphics/coin_all.png");
 	VertexArray coinSpin;
     coinSpin.setPrimitiveType(Quads);
-    coinSpin.resize(4);
+    coinSpin.resize(5);
 
-    const int COIN_SHEET_WIDTH = 200;
+    const int COIN_SHEET_WIDTH = 32;
     const float FRAME_TIME_S = 0.2f;
 
     Vector2f coinPosition = { resolution.x / 2, resolution.y / 2 };
@@ -90,11 +90,9 @@ int main()
     coinSpin[1].position = coinPosition + Vector2f(COIN_SHEET_WIDTH, 0);
     coinSpin[2].position = coinPosition + Vector2f(COIN_SHEET_WIDTH, COIN_SHEET_WIDTH);
     coinSpin[3].position = coinPosition + Vector2f(0, COIN_SHEET_WIDTH);
+	coinSpin[4].position = coinPosition + Vector2f(0,0);
 
-    Time animate_time;
     int frame = 0;
-
-    Time dt;
 
 
 	// Prepare the bomb
@@ -289,15 +287,6 @@ int main()
 		if (state == State::PLAYING)
 		{
 			window.clear();
-			dt = clock.restart();
-        	animate_time += dt;
-
-			if (animate_time >= seconds(FRAME_TIME_S))
-			{
-				frame++;
-				frame %= 4;
-				animate_time = Time::Zero;
-			}
 
 			// Set the texture coordinates of each vertex
 			int frameOffset = COIN_SHEET_WIDTH * frame;
@@ -306,6 +295,7 @@ int main()
 			coinSpin[1].texCoords = Vector2f(COIN_SHEET_WIDTH, 0 + frameOffset);
 			coinSpin[2].texCoords = Vector2f(COIN_SHEET_WIDTH, COIN_SHEET_WIDTH + frameOffset);
 			coinSpin[3].texCoords = Vector2f(0, COIN_SHEET_WIDTH + frameOffset);
+			coinSpin[4].position = coinPosition + Vector2f(0, 0 + frameOffset);
 
 
 			// set the mainView to be displayed in the window
