@@ -156,7 +156,7 @@ int main()
     count.setBuffer(countBuffer);
     
     Texture textureBoom;
-    textureBoom.loadFromFile("graphics/tree.png");
+    textureBoom.loadFromFile("graphics/boom.png");
     Sprite spriteBoom;
     spriteBoom.setTexture(textureBoom);
 
