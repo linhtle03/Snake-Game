@@ -1,4 +1,6 @@
 #include "Snake.h"
+
+#include "Snake.h"
 #include "TextureHolder.h"
 
 Snake::Snake()
@@ -8,19 +10,16 @@ Snake::Snake()
 	m_MaxHealth = START_HEALTH;
 
 	// Associate a texture with the sprite
-	// !!Watch this space!!
 	m_Texture.loadFromFile("graphics/snake_head.png");
 	m_Sprite.setTexture(m_Texture);
-	//m_Sprite = Sprite(TextureHolder::GetTexture("graphics/snake_head2.png"));
 
-	// Set the origin of the sprite to the centre, 
-	// for smooth rotation
+	// Set the origin of the sprite
 	m_Sprite.setOrigin(100, 100);
 }
 
-void Snake::spawn(IntRect arena, Vector2f resolution, int tileSize)
+void Snake::spawn(IntRect arena, Vector2f resolution)//, int tileSize)
 {
-	// Place the player in the middle of the arena
+	// Place the snake grass center
 	m_Position.x = arena.width / 2;
 	m_Position.y = arena.height / 2;
 
@@ -46,7 +45,7 @@ Time Snake::getLastHitTime()
 
 bool Snake::hit(Time timeHit)
 {
-	if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > 200)// 2 tenths of second
+	if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > 500)// half a second
 	{
 		m_LastHit = timeHit;
 		m_Health -= 10;
@@ -90,7 +89,7 @@ void Snake::moveLeft()
 	m_RightPressed = false;
 	m_UpPressed = false;
 	m_DownPressed = false;
-	
+
 }
 
 void Snake::moveRight()
@@ -120,29 +119,7 @@ void Snake::moveDown()
 
 }
 
-/*
-void Snake::stopLeft()
-{
-	m_LeftPressed = false;
-}
-
-void Snake::stopRight()
-{
-	m_RightPressed = false;
-}
-
-void Snake::stopUp()
-{
-	m_UpPressed = false;
-}
-
-void Snake::stopDown()
-{
-	m_DownPressed = false;
-}
-
-*/
-void Snake::update(float elapsedTime, Vector2i mousePosition)
+void Snake::update(float elapsedTime)//, Vector2i mousePosition)
 {
 	float angle = 0;
 
@@ -195,18 +172,12 @@ void Snake::update(float elapsedTime, Vector2i mousePosition)
 		m_Position.y = m_Arena.top;// +m_TileSize;
 	}
 
-	// Calculate the angle the player is facing
-	/*
-	float angle = (atan2(mousePosition.y - m_Resolution.y / 2,
-		mousePosition.x - m_Resolution.x / 2)
-		* 180) / 3.141;
-	*/
-
 }
 
 void Snake::upgradeSpeed()
 {//20% speed upgrade 
-	m_Speed += (START_SPEED * .2);}
+	m_Speed += (START_SPEED * .2);
+}
 
 void Snake::upgradeHealth()
 {
@@ -216,7 +187,8 @@ void Snake::upgradeHealth()
 }
 
 void Snake::increaseHealthLevel(int amount)
-{m_Health += amount;
+{
+	m_Health += amount;
 
 	// But not beyond the maximum
 	if (m_Health > m_MaxHealth)
@@ -225,58 +197,6 @@ void Snake::increaseHealthLevel(int amount)
 	}
 }
 
-/*Snake::Snake(float startX, float startY)
-{
-    m_Position.x = startX;
-	m_Position.y = startY;
 
-	m_Shape.setSize(sf::Vector2f(50, 5));
-	m_Shape.setPosition(m_Position);
-}
 
-FloatRect Snake::getPosition()
-{
-    return m_Shape.getGlobalBounds();
-}
-RectangleShape Snake::getShape()
-{
-    return m_Shape;
-}
 
-void Snake::moveLeft()
-{
-    m_MovingLeft = true;
-}
-
-void Snake::moveRight()
-{
-    m_MovingRight = true;
-}
-
-void Snake::moveUp()
-{
-    m_MovingUp = true;
-}
-
-void Snake::moveDown()
-{
-    m_MovingDown = true;
-}
-
-void Snake::update(Time dt)
-{
-    if (m_MovingLeft) {
-		m_Position.x -= m_Speed * dt.asSeconds();
-	}
-	if (m_MovingRight) {
-		m_Position.x += m_Speed * dt.asSeconds();
-	}
-    if (m_MovingDown) {
-		m_Position.y -= m_Speed * dt.asSeconds();
-	}
-	if (m_MovingUp) {
-		m_Position.y += m_Speed * dt.asSeconds();
-	}
-	m_Shape.setPosition(m_Position);
-}
-*/
