@@ -136,7 +136,7 @@ int main()
 
     // Prepare the powerup sound
     SoundBuffer powerupBuffer;
-    powerupBuffer.loadFromFile("sound/snakesound.wav");
+    powerupBuffer.loadFromFile("sound/igotasnake.wav");
     Sound powerup;
     powerup.setBuffer(powerupBuffer);
     // Prepare the pickup sound
