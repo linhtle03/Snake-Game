@@ -2,6 +2,7 @@
 #include "Snake.h"
 #include "Pickup.h"
 #include "Coin.h"
+#include "Bomb.h"
 #include <SFML/Audio.hpp>
 
 using namespace sf;
@@ -100,10 +101,22 @@ int main()
 
 	// Prepare the bomb
 	Texture textureBomb;
-	textureBomb.loadFromFile("graphics/bomb_1.png");
-	Sprite spriteBomb;
-	spriteBomb.setTexture(textureBomb);
-	spriteBomb.setPosition(200, 300);
+	textureBomb.loadFromFile("graphics/bomb_all.png");
+	VertexArray bombExpl;
+    bombExpl.setPrimitiveType(Quads);
+    bombExpl.resize(9);
+
+	const int BOMB_SHEET_WIDTH = 200;
+
+	bombExpl[0].position = coinPosition + Vector2f(0, 0);
+    bombExpl[1].position = coinPosition + Vector2f(BOMB_SHEET_WIDTH, 0);
+    bombExpl[2].position = coinPosition + Vector2f(BOMB_SHEET_WIDTH, BOMB_SHEET_WIDTH);
+    bombExpl[3].position = coinPosition + Vector2f(0, BOMB_SHEET_WIDTH);
+	bombExpl[4].position = coinPosition + Vector2f(0,0);
+	bombExpl[5].position = coinPosition + Vector2f(0, 0);
+    bombExpl[6].position = coinPosition + Vector2f(BOMB_SHEET_WIDTH, 0);
+    bombExpl[7].position = coinPosition + Vector2f(BOMB_SHEET_WIDTH, BOMB_SHEET_WIDTH);
+    bombExpl[8].position = coinPosition + Vector2f(0, BOMB_SHEET_WIDTH);
 
 	// Prepare the hit sound
 	SoundBuffer hitBuffer;
@@ -312,7 +325,7 @@ int main()
 			// Draw the player
 			window.draw(player.getSprite());
 			window.draw(coinSpin, &textureCoin);
-			window.draw(spriteBomb);
+			window.draw(bombExpl, &textureBomb);
 			//window.draw(ball.getShape());
 
 		}
