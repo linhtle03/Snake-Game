@@ -129,14 +129,14 @@ int main()
 	// The main game loop
 	while (window.isOpen())
 	{
-		dt = clock.restart();
-		animate_time += dt;
 		if (paused)
 		{
 			// Draw our message
 			window.draw(messageText);
 			window.display();
 		}
+		dt = clock.restart(); 
+		animate_time += dt;
 		if (animate_time >= seconds(FRAME_TIME_S))
 			{
 				frame++;
@@ -269,8 +269,6 @@ int main()
 		*/
 		if (state == State::PLAYING)
 		{
-			// Update the delta time
-			Time dt = clock.restart();
 			// Update the total game time
 			gameTimeTotal += dt;
 			// Make a decimal fraction of 1 from the delta time
