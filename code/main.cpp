@@ -85,13 +85,13 @@ int main()
     const int COIN_SHEET_WIDTH = 160;
     const float FRAME_TIME_S = 0.2f;
 
-    Vector2f coinPosition = { resolution.x / 2, resolution.y / 2 };
+    Vector2f animatedPosition = { resolution.x / 2, resolution.y / 2 };
 
-    coinSpin[0].position = coinPosition + Vector2f(0, 0);
-    coinSpin[1].position = coinPosition + Vector2f(COIN_SHEET_WIDTH, 0);
-    coinSpin[2].position = coinPosition + Vector2f(COIN_SHEET_WIDTH, COIN_SHEET_WIDTH);
-    coinSpin[3].position = coinPosition + Vector2f(0, COIN_SHEET_WIDTH);
-	coinSpin[4].position = coinPosition + Vector2f(0,0);
+    coinSpin[0].position = animatedPosition + Vector2f(0, 0);
+    coinSpin[1].position = animatedPosition + Vector2f(COIN_SHEET_WIDTH, 0);
+    coinSpin[2].position = animatedPosition + Vector2f(COIN_SHEET_WIDTH, COIN_SHEET_WIDTH);
+    coinSpin[3].position = animatedPosition + Vector2f(0, COIN_SHEET_WIDTH);
+	coinSpin[4].position = animatedPosition + Vector2f(0,0);
 
     int frame = 0;
 	Time animate_time;
@@ -108,15 +108,16 @@ int main()
 
 	const int BOMB_SHEET_WIDTH = 200;
 
-	bombExpl[0].position = coinPosition + Vector2f(0, 0);
-    bombExpl[1].position = coinPosition + Vector2f(BOMB_SHEET_WIDTH, 0);
-    bombExpl[2].position = coinPosition + Vector2f(BOMB_SHEET_WIDTH, BOMB_SHEET_WIDTH);
-    bombExpl[3].position = coinPosition + Vector2f(0, BOMB_SHEET_WIDTH);
-	bombExpl[4].position = coinPosition + Vector2f(0,0);
-	bombExpl[5].position = coinPosition + Vector2f(0, 0);
-    bombExpl[6].position = coinPosition + Vector2f(BOMB_SHEET_WIDTH, 0);
-    bombExpl[7].position = coinPosition + Vector2f(BOMB_SHEET_WIDTH, BOMB_SHEET_WIDTH);
-    bombExpl[8].position = coinPosition + Vector2f(0, BOMB_SHEET_WIDTH);
+
+	bombExpl[0].position = animatedPosition + Vector2f(0, 0);
+    bombExpl[1].position = animatedPosition + Vector2f(BOMB_SHEET_WIDTH, 0);
+    bombExpl[2].position = animatedPosition + Vector2f(BOMB_SHEET_WIDTH, BOMB_SHEET_WIDTH);
+    bombExpl[3].position = animatedPosition + Vector2f(0, BOMB_SHEET_WIDTH);
+	bombExpl[4].position = animatedPosition + Vector2f(0,0);
+	bombExpl[5].position = animatedPosition + Vector2f(0, 0);
+    bombExpl[6].position = animatedPosition + Vector2f(BOMB_SHEET_WIDTH, 0);
+    bombExpl[7].position = animatedPosition + Vector2f(BOMB_SHEET_WIDTH, BOMB_SHEET_WIDTH);
+    bombExpl[8].position = animatedPosition + Vector2f(0, BOMB_SHEET_WIDTH);
 
 	// Prepare the hit sound
 	SoundBuffer hitBuffer;
@@ -163,7 +164,7 @@ int main()
 			coinSpin[1].texCoords = Vector2f(COIN_SHEET_WIDTH, 0 + frameOffset);
 			coinSpin[2].texCoords = Vector2f(COIN_SHEET_WIDTH, COIN_SHEET_WIDTH + frameOffset);
 			coinSpin[3].texCoords = Vector2f(0, COIN_SHEET_WIDTH + frameOffset);
-			coinSpin[4].position = coinPosition + Vector2f(0, 0 + frameOffset);
+			coinSpin[4].position = animatedPosition + Vector2f(0, 0 + frameOffset);
 		// Handle events
 		Event event;
 		while (window.pollEvent(event))
