@@ -158,13 +158,24 @@ int main()
 				animate_time = Time::Zero;
 			}
 			// Set the texture coordinates of each vertex
-			int frameOffset = COIN_SHEET_WIDTH * frame;
+			int coinFrameOffset = COIN_SHEET_WIDTH * frame;
+			int bombFrameOffset = BOMB_SHEET_WIDTH + frame;
 
-			coinSpin[0].texCoords = Vector2f(0, 0 + frameOffset);
-			coinSpin[1].texCoords = Vector2f(COIN_SHEET_WIDTH, 0 + frameOffset);
-			coinSpin[2].texCoords = Vector2f(COIN_SHEET_WIDTH, COIN_SHEET_WIDTH + frameOffset);
-			coinSpin[3].texCoords = Vector2f(0, COIN_SHEET_WIDTH + frameOffset);
-			coinSpin[4].position = animatedPosition + Vector2f(0, 0 + frameOffset);
+			coinSpin[0].texCoords = Vector2f(0, 0 + coinFrameOffset);
+			coinSpin[1].texCoords = Vector2f(COIN_SHEET_WIDTH, 0 + coinFrameOffset);
+			coinSpin[2].texCoords = Vector2f(COIN_SHEET_WIDTH, COIN_SHEET_WIDTH + coinFrameOffset);
+			coinSpin[3].texCoords = Vector2f(0, COIN_SHEET_WIDTH + coinFrameOffset);
+			coinSpin[4].position = animatedPosition + Vector2f(0, 0 + coinFrameOffset);
+
+			bombExpl[0].texCoords = Vector2f(0, 0 + bombFrameOffset);
+			bombExpl[1].texCoords = Vector2f(BOMB_SHEET_WIDTH, 0 + bombFrameOffset);
+			bombExpl[2].texCoords = Vector2f(BOMB_SHEET_WIDTH, BOMB_SHEET_WIDTH + bombFrameOffset);
+			bombExpl[3].texCoords = Vector2f(0, BOMB_SHEET_WIDTH + bombFrameOffset);
+			bombExpl[4].texCoords = Vector2f(0, 0 + bombFrameOffset);
+			bombExpl[5].texCoords = Vector2f(0, 0 + bombFrameOffset);
+			bombExpl[6].texCoords = Vector2f(BOMB_SHEET_WIDTH, 0 + bombFrameOffset);
+			bombExpl[7].texCoords = Vector2f(BOMB_SHEET_WIDTH, BOMB_SHEET_WIDTH + bombFrameOffset);
+			bombExpl[8].position = Vector2f(0, BOMB_SHEET_WIDTH + bombFrameOffset);
 		// Handle events
 		Event event;
 		while (window.pollEvent(event))
